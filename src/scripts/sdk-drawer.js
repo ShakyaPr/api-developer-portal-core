@@ -17,6 +17,44 @@
  */
 /* eslint-disable no-undef */
 
+/**extractAppIdFromUrl
+ * Extracts applicationId from the current page URL
+ * Assumes URL structure: /[orgId]/views/[viewName]/applications/[applicationId]
+ * @returns {String} - Object containing applicationId
+ */
+function extractAppIdFromUrl() {
+    const pathParts = window.location.pathname.split('/').filter(part => part);
+    
+    // Expected URL structure: /[orgName]/views/[viewName]/applications/[applicationId]
+    const orgName = pathParts[0];
+    const applicationIndex = pathParts.indexOf('applications');
+    const applicationId = applicationIndex !== -1 && applicationIndex + 1 < pathParts.length 
+        ? pathParts[applicationIndex + 1] 
+        : null;
+
+    return { orgName, applicationId };
+}
+
+/**
+ * Gets the application ID from the drawer's data attribute
+ * @returns {string} - The application ID
+ */
+function getApplicationId() {
+    const drawer = document.getElementById('sdkDrawer');
+    const fromData = drawer ? drawer.dataset.applicationId : null;
+    
+    if (fromData) return fromData;
+    
+    // Fallback to URL extraction
+    const applicationId = extractAppIdFromUrl();
+    return applicationId;
+}
+
+function getOrgName() {
+    const { orgName } = extractAppIdFromUrl();
+    return orgName;
+}
+
 /**
  * Opens the SDK drawer and initializes its state
  * Validates that at least 1 API is selected before opening
@@ -429,6 +467,10 @@ function generateSDKFromDrawerInternal(language) {
         alert('Please provide a description for AI-generated SDK requirements.');
         return;
     }
+
+    // Get applicationId from data attributes
+    const applicationId = getApplicationId();
+    const orgName = getOrgName();
     
     const selectedAPIs = Array.from(checkedCheckboxes).map(checkbox => ({
         id: checkbox.dataset.apiId,
@@ -438,13 +480,14 @@ function generateSDKFromDrawerInternal(language) {
     
     const sdkConfiguration = {
         language: selectedLanguage,
-        description: description.trim()
+        description: description.trim(),
+        orgName: orgName
     };
     
-    const pathParts = window.location.pathname.split('/');
-    const orgName = pathParts[1];
-    const applicationId = pathParts[pathParts.length - 1];
-    const viewName = pathParts[3];
+    // const pathParts = window.location.pathname.split('/');
+    // const orgName = pathParts[1];
+    // const applicationId = pathParts[pathParts.length - 1];
+    // const viewName = pathParts[3];
     
     console.log('SDK Generation Configuration:', {
         language: selectedLanguage,
@@ -453,8 +496,10 @@ function generateSDKFromDrawerInternal(language) {
     });
     
     showSDKGenerationLoading();
-    
-    fetch(`/${orgName}/views/${viewName}/applications/${applicationId}/generate-sdk`, {
+
+    const generateUrl = `/devportal/applications/${applicationId}/generate-sdk`;
+
+    fetch(generateUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -1049,7 +1094,7 @@ function cancelSDKGeneration() {
         const orgName = window.location.pathname.split('/')[1];
         const viewName = window.location.pathname.split('/')[3];
         const applicationId = window.location.pathname.split('/')[5];
-        const cancelUrl = `/${orgName}/views/${viewName}/applications/${applicationId}/sdk/cancel/${window.currentSDKJobId}`;
+        const cancelUrl = `/devportal/applications/${applicationId}/sdk/cancel/${window.currentSDKJobId}`;
         
         fetch(cancelUrl, {
             method: 'POST',

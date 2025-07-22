@@ -147,5 +147,36 @@ router.post('/api-keys/generate', enforceSecuirty(constants.SCOPES.DEVELOPER), d
 router.post('/api-keys/:apiKeyID/revoke', enforceSecuirty(constants.SCOPES.DEVELOPER), devportalController.revokeAPIKeys);
 router.post('/api-keys/:apiKeyID/regenerate', enforceSecuirty(constants.SCOPES.DEVELOPER), devportalController.regenerateAPIKeys);
 
+router.post('/applications/:applicationId/generate-sdk', enforceSecuirty(constants.SCOPES.DEVELOPER), devportalController.generateSDK);
+router.get('/applications/:applicationId/sdk/job-progress/:jobId', enforceSecuirty(constants.SCOPES.DEVELOPER), devportalController.streamSDKProgress);
+router.post('/applications/:applicationId/sdk/cancel/:jobId', enforceSecuirty(constants.SCOPES.DEVELOPER), devportalController.cancelSDK);
+router.get('/download/sdk/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(process.cwd(), 'generated-sdks', filename);
+
+    const normalizedPath = path.normalize(filePath);
+    const expectedDir = path.join(process.cwd(), 'generated-sdks');
+
+    if (!normalizedPath.startsWith(expectedDir)) {
+        return res.status(403).json({ error: 'Access denied' });
+    }
+
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ error: 'SDK file not found' });
+    }
+
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+    // Stream the file
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
+
+    fileStream.on('error', (err) => {
+        console.error('Error streaming SDK file:', err);
+        res.status(500).json({ error: 'Error downloading SDK' });
+    });
+});
+
 router.post('/login', devportalController.login);
 module.exports = router;

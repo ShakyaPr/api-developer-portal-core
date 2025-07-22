@@ -38,12 +38,12 @@ class SDKJobService extends EventEmitter {
         this.activeJobs = new Map();
     }
 
-    async createJob(orgId, applicationId, jobPayload = {}) {
-        const jobId = this.generateJobId(orgId, applicationId);
+    async createJob(applicationId, jobPayload) {
+        const jobId = this.generateJobId(applicationId);
 
         const jobData = {
             jobId,
-            orgId,
+            orgId: jobPayload.orgId,
             applicationId,
             jobStatus: 'PENDING',
             progress: 0,
@@ -469,9 +469,9 @@ class SDKJobService extends EventEmitter {
         return null;
     }
 
-    generateJobId(orgId, applicationId) {
+    generateJobId(applicationId) {
         const randomPostfix = Math.floor(10000 + Math.random() * 90000); // 5 digit random number
-        return `${orgId}-${applicationId}-${randomPostfix}`;
+        return `${applicationId}-${randomPostfix}`;
     }
 
     emitProgress(jobId, progressData) {
