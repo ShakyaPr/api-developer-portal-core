@@ -14,8 +14,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Verify the installed wget version
 RUN wget --version
-RUN java --version
-# RUN mkdir /.tmp
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -27,11 +25,7 @@ COPY openapitools.json ./
 # Install dependencies using npm ci for faster, cleaner installations in production
 RUN npm ci --only=production
 
-RUN ls -ltrh
 RUN npx @openapitools/openapi-generator-cli version
-RUN ls -ltrh node_modules/@openapitools/openapi-generator-cli
-RUN ls -ltrh node_modules/@openapitools/openapi-generator-cli/versions/
-
 
 # Copy the rest of the application files
 COPY . .
@@ -41,10 +35,6 @@ EXPOSE 8080
 
 # Create a non-root user with UID 10001 to satisfy Checkov CKV_CHOREO_1
 RUN groupadd -g 10001 appgroup && useradd -m -u 10001 -g appgroup -s /bin/bash appuser
-
-# RUN mkdir -p /app/generated-sdks/merged-specs && \
-#     chown -R 10001:10001 /app/generated-sdks && \
-#     chmod -R 755 /app/generated-sdks
 
 # Explicitly switch to UID 10001 instead of using "appuser"
 USER 10001
