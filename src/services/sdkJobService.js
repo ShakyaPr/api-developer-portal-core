@@ -1006,8 +1006,8 @@ class SDKJobService extends EventEmitter {
             console.log(`Final ZIP created: ${finalZipPath}`);
             
             // Clean up SDK folder
-            //await fs.promises.rm(sdkPath, { recursive: true, force: true });
-            //console.log('Cleaned up SDK folder');
+            await fs.promises.rm(sdkPath, { recursive: true, force: true });
+            console.log('Cleaned up SDK folder');
             
             return {
                 finalZipPath: finalZipPath,
@@ -1538,311 +1538,44 @@ class SDKJobService extends EventEmitter {
     };
 
     /**
-     * Verify file exists with exponential retry mechanism
-     * @param {string} filePath - Path to the file to verify
-     * @param {number} maxRetries - Maximum number of retry attempts (default: 4)
-     * @returns {Promise<boolean>} - Promise that resolves when file is verified
-     */
-    async verifyFileExistsWithRetry(filePath, maxRetries = 4) {
-        let lastError = null;
-        const baseDelay = 500; // Base delay of 500ms
-        
-        for (let attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-                console.log(`🔍 File verification attempt ${attempt}/${maxRetries} for: ${path.basename(filePath)}`);
-                
-                // Check if file exists
-                const fileExists = await fs.promises.access(filePath).then(() => true).catch(() => false);
-                if (!fileExists) {
-                    throw new Error(`File does not exist: ${filePath}`);
-                }
-                
-                // Get file stats to verify it's a proper file
-                const stats = await fs.promises.stat(filePath);
-                console.log(`📊 File stats - Size: ${stats.size} bytes, Created: ${stats.birthtime.toISOString()}`);
-                
-                // Verify file has content (should be at least 1KB for a valid ZIP)
-                if (stats.size === 0) {
-                    throw new Error('File exists but is empty');
-                }
-                
-                if (stats.size < 1024) {
-                    throw new Error(`File is too small (${stats.size} bytes), likely incomplete`);
-                }
-                
-                // Try to open and close the file to ensure it's not locked
-                const fileHandle = await fs.promises.open(filePath, 'r');
-                await fileHandle.close();
-                
-                // Validate ZIP file signature if it's a ZIP file
-                if (path.extname(filePath).toLowerCase() === '.zip') {
-                    await this.validateZipFileSignature(filePath);
-                }
-                
-                console.log(`✅ File verification successful on attempt ${attempt}: ${path.basename(filePath)} (${stats.size} bytes)`);
-                return true;
-                
-            } catch (error) {
-                lastError = error;
-                console.warn(`⚠️ File verification attempt ${attempt}/${maxRetries} failed: ${error.message}`);
-                
-                // If this is the last attempt, break and throw the error
-                if (attempt === maxRetries) {
-                    break;
-                }
-                
-                // Calculate exponential backoff delay: 500ms, 1000ms, 2000ms, 4000ms
-                const delay = baseDelay * Math.pow(2, attempt - 1);
-                console.log(`⏳ Waiting ${delay}ms before retry (exponential backoff)...`);
-                await this.simulateDelay(delay);
-            }
-        }
-        
-        console.error(`❌ File verification failed after ${maxRetries} attempts: ${lastError.message}`);
-        throw new Error(`File is not available after ${maxRetries} retry attempts: ${lastError.message}`);
-    }
-
-    /**
-     * Validate that the file is a proper ZIP file by checking its signature
-     * @param {string} filePath - Path to the ZIP file
-     */
-    async validateZipFileSignature(filePath) {
-        try {
-            const fileHandle = await fs.promises.open(filePath, 'r');
-            const buffer = Buffer.alloc(4);
-            await fileHandle.read(buffer, 0, 4, 0);
-            await fileHandle.close();
-            
-            // ZIP file signature: 0x504B0304 (PK..) for regular ZIP files
-            const signature = buffer.readUInt32LE(0);
-            const validSignatures = [
-                0x04034B50, // Regular ZIP file (PK\x03\x04)
-                0x06054B50, // Empty ZIP file (PK\x05\x06)
-                0x08074B50  // Spanned ZIP file (PK\x07\x08)
-            ];
-            
-            if (!validSignatures.includes(signature)) {
-                throw new Error(`Invalid ZIP file signature: 0x${signature.toString(16).padStart(8, '0')}`);
-            }
-            
-            console.log(`✅ ZIP file signature validated: 0x${signature.toString(16).padStart(8, '0')}`);
-            
-        } catch (error) {
-            throw new Error(`ZIP file validation failed: ${error.message}`);
-        }
-    }
-
-    /**
-     * List files and directories in the app folder (root folder) with specified depth
-     * @param {string} rootPath - Root path to explore (defaults to process.cwd())
-     * @param {number} maxDepth - Maximum depth to explore (default: 3)
-     * @param {number} currentDepth - Current depth level (internal parameter)
-     * @param {string} prefix - Prefix for display formatting (internal parameter)
-     * @returns {Array} - Array of file/directory information
-     */
-    async listAppFolderContents(rootPath = process.cwd(), maxDepth = 2, currentDepth = 0, prefix = '') {
-        const results = [];
-        
-        if (currentDepth > maxDepth) {
-            return results;
-        }
-        
-        try {
-            const items = await fs.promises.readdir(rootPath, { withFileTypes: true });
-            
-            for (const item of items) {
-                const fullPath = path.join(rootPath, item.name);
-                const relativePath = path.relative(process.cwd(), fullPath);
-                const displayPath = `${prefix}${item.isDirectory() ? '📁' : '📄'} ${item.name}`;
-                
-                const itemInfo = {
-                    name: item.name,
-                    type: item.isDirectory() ? 'directory' : 'file',
-                    fullPath: fullPath,
-                    relativePath: relativePath,
-                    depth: currentDepth,
-                    displayPath: displayPath
-                };
-                
-                results.push(itemInfo);
-                console.log(displayPath);
-                
-                // If it's a directory and we haven't reached max depth, recurse
-                if (item.isDirectory() && currentDepth < maxDepth) {
-                    const subResults = await this.listAppFolderContents(
-                        fullPath, 
-                        maxDepth, 
-                        currentDepth + 1, 
-                        prefix + '  '
-                    );
-                    results.push(...subResults);
-                }
-            }
-            
-        } catch (error) {
-            console.error(`❌ Error reading directory ${rootPath}:`, error.message);
-            results.push({
-                name: path.basename(rootPath),
-                type: 'error',
-                fullPath: rootPath,
-                relativePath: path.relative(process.cwd(), rootPath),
-                depth: currentDepth,
-                error: error.message,
-                displayPath: `${prefix}❌ Error: ${error.message}`
-            });
-        }
-        
-        return results;
-    }
-
-    /**
-     * Debug method to explore app folder structure before download
-     * @param {string} context - Context description for the exploration
-     */
-    async exploreAppFolderStructure(context = 'Pre-download exploration') {
-        console.log(`\n🔍 ${context} - App Folder Structure (depth: 3)`);
-        console.log(`📁 Root Path: ${process.cwd()}`);
-        console.log('─'.repeat(80));
-        
-        try {
-            const startTime = Date.now();
-            const results = await this.listAppFolderContents(process.cwd(), 3);
-            const endTime = Date.now();
-            
-            console.log('─'.repeat(80));
-            console.log(`📊 Exploration Summary:`);
-            console.log(`   • Total items found: ${results.length}`);
-            console.log(`   • Directories: ${results.filter(r => r.type === 'directory').length}`);
-            console.log(`   • Files: ${results.filter(r => r.type === 'file').length}`);
-            console.log(`   • Errors: ${results.filter(r => r.type === 'error').length}`);
-            console.log(`   • Exploration time: ${endTime - startTime}ms`);
-            
-            // Log some key directories if they exist
-            const keyDirectories = ['src', 'generated-sdks', 'node_modules', 'config', 'resources'];
-            const foundKeyDirs = results.filter(r => 
-                r.type === 'directory' && 
-                r.depth === 0 && 
-                keyDirectories.includes(r.name)
-            );
-            
-            if (foundKeyDirs.length > 0) {
-                console.log(`   • Key directories found: ${foundKeyDirs.map(d => d.name).join(', ')}`);
-            }
-            
-            // Check for generated-sdks specifically
-            const generatedSdksDir = results.find(r => 
-                r.name === 'generated-sdks' && r.type === 'directory' && r.depth === 0
-            );
-            
-            if (generatedSdksDir) {
-                const sdkFiles = results.filter(r => 
-                    r.relativePath.startsWith('generated-sdks') && 
-                    r.type === 'file' && 
-                    r.name.endsWith('.zip')
-                );
-                console.log(`   • SDK ZIP files in generated-sdks: ${sdkFiles.length}`);
-                if (sdkFiles.length > 0) {
-                    console.log(`   • Recent SDK files: ${sdkFiles.slice(-3).map(f => f.name).join(', ')}`);
-                }
-            } else {
-                console.log(`   ⚠️ generated-sdks directory not found in root`);
-            }
-            
-            console.log('─'.repeat(80));
-            
-            return results;
-            
-        } catch (error) {
-            console.error(`❌ Error during app folder exploration:`, error);
-            return [];
-        }
-    }
-
-    /**
      * Route handler for SDK download
      * Serves the generated SDK ZIP file for download
      */
     downloadSDK = async (req, res) => {
         try {
             const { filename } = req.params;
-            
-            console.log(`📥 Download request for file: ${filename}`);
-            
-            // 🔍 Explore app folder structure before download
-            await this.exploreAppFolderStructure(`Download request for ${filename}`);
-            
             const filePath = path.join(process.cwd(), 'generated-sdks', filename);
-            console.log(`📁 Full file path: ${filePath}`);
 
-            // Security check - prevent path traversal attacks
             const normalizedPath = path.normalize(filePath);
             const expectedDir = path.join(process.cwd(), 'generated-sdks');
 
             if (!normalizedPath.startsWith(expectedDir)) {
-                console.error(`🚫 Security violation: Path traversal attempt for ${filename}`);
                 return res.status(403).json({ error: 'Access denied' });
             }
 
-            // Use exponential retry mechanism to verify file existence (4 retries)
-            try {
-                await this.verifyFileExistsWithRetry(filePath, 4);
-                console.log(`✅ File verified and ready for download: ${filename}`);
-            } catch (error) {
-                console.error(`❌ File verification failed after retries: ${error.message}`);
-                return res.status(404).json({ 
-                    error: 'SDK file not found',
-                    filename: filename,
-                    message: error.message
-                });
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).json({ error: 'SDK file not found' });
             }
 
-            // Get file stats for Content-Length header and additional validation
-            const fileStats = await fs.promises.stat(filePath);
-            
-            console.log(`📦 Preparing download: ${filename} (${fileStats.size} bytes)`);
-
-            // Set response headers for ZIP file download
             res.setHeader('Content-Type', 'application/zip');
             res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-            res.setHeader('Pragma', 'no-cache');
-            res.setHeader('Expires', '0');
 
-            console.log(`🚀 Starting file stream for: ${filename}`);
-
-            // Create and pipe the file stream
+            // Stream the file
             const fileStream = fs.createReadStream(filePath);
-            
-            fileStream.on('error', (err) => {
-                console.error('❌ Error streaming SDK file:', err);
-                if (!res.headersSent) {
-                    res.status(500).json({ 
-                        error: 'Error streaming SDK file',
-                        message: err.message
-                    });
-                }
-            });
-
-            fileStream.on('end', () => {
-                console.log(`✅ Download completed successfully: ${filename}`);
-            });
-
-            fileStream.on('close', () => {
-                console.log(`📁 File stream closed for: ${filename}`);
-            });
-            
-            // Pipe the file to the response
             fileStream.pipe(res);
+
+            fileStream.on('error', (err) => {
+                console.error('Error streaming SDK file:', err);
+                res.status(500).json({ error: 'Error downloading SDK' });
+            });
             
         } catch (error) {
-            console.error('❌ Error in download handler:', error);
-            if (!res.headersSent) {
-                res.status(500).json({
-                    success: false,
-                    message: 'Error downloading SDK file',
-                    error: error.message
-                });
-            }
+            console.error('Error downloading SDK:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Error downloading SDK file',
+                error: error.message
+            });
         }
     };
 }
