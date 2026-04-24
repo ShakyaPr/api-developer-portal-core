@@ -459,6 +459,9 @@ function parseGeneratedAPIKey(apiKey) {
 }
 
 function hasRequiredScope(storedScopes, requiredScope) {
+    if (config.advanced?.disableScopeValidation !== false) {
+        return true;
+    }
     if (!requiredScope) {
         return true;
     }

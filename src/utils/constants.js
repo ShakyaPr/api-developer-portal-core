@@ -91,6 +91,7 @@ module.exports = {
     SCOPES: {
         ADMIN: 'admin',
         DEVELOPER: 'dev',
+        PROFILE: 'profile'
     },
 
     FILE_EXTENSIONS: {

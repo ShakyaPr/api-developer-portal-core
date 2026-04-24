@@ -226,8 +226,7 @@ router.delete('/organizations/:orgId/views/:viewName/api-flows/:apiFlowId', enfo
 router.post('/organizations/:orgId/views/:viewName/api-flows/generate-prompt', enforceSecuirty(constants.SCOPES.ADMIN), requireCsrfForMutatingApi, apiFlowService.generatePrompt);
 
 // API Key Generation
-router.post('/organizations/:orgId/cli-api-keys/generate',
-    enforceSecuirty(constants.SCOPES.DEVELOPER), requireCsrfForMutatingApi, apiKeyGenService.generateCLIAPIKey);
+router.post('/organizations/:orgId/cli-api-keys/generate', enforceSecuirty(constants.SCOPES.PROFILE), requireCsrfForMutatingApi, apiKeyGenService.generateCLIAPIKey);
 
 router.post('/temp-arazzo-file', enforceSecuirty(constants.SCOPES.ADMIN), requireCsrfForMutatingApi, async (req, res) => {
     const { content, filename } = req.body;

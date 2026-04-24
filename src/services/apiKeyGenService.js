@@ -28,6 +28,7 @@ const secret = require(process.cwd() + '/secret.json');
 const API_KEY_PREFIX = 'dpak';
 const API_KEY_VERSION = 'v1';
 const KEY_NAME_PATTERN = /^[a-z0-9][a-z0-9_-]{0,127}$/;
+const config = require(process.cwd() + '/config.json');
 
 function accessTokenPresent(req) {
     if (req.user) {
@@ -58,31 +59,26 @@ function normalizeScopes(rawScopes, fallbackScopes) {
     return fallbackScopes;
 }
 
-function parseExpiry(rawExpiry) {
-    if (rawExpiry === undefined || rawExpiry === null || rawExpiry === '') {
+function parseValidityDuration(rawDuration) {
+    if (rawDuration === undefined || rawDuration === null || rawDuration === '') {
         return null;
     }
 
-    let expiryMs;
-    const rawValue = typeof rawExpiry === 'string' ? rawExpiry.trim() : rawExpiry;
-    const numericExpiry = Number(rawValue);
-    if (Number.isFinite(numericExpiry)) {
-        expiryMs = Math.abs(numericExpiry) < 1e12
-            ? Math.floor(numericExpiry * 1000)
-            : Math.floor(numericExpiry);
-    } else if (typeof rawValue === 'string') {
-        expiryMs = Date.parse(rawValue);
-    }
-
-    if (!Number.isFinite(expiryMs)) {
+    const rawValue = typeof rawDuration === 'string' ? rawDuration.trim() : rawDuration;
+    const durationSeconds = Number(rawValue);
+    if (!Number.isFinite(durationSeconds) || durationSeconds <= 0) {
         return null;
     }
 
-    const expiresAt = new Date(expiryMs);
-    if (expiresAt <= new Date()) {
+    if (!Number.isInteger(durationSeconds)) {
         return null;
     }
-    return expiresAt;
+
+    return durationSeconds;
+}
+
+function isScopeValidationEnabled() {
+    return config.advanced?.disableScopeValidation === false;
 }
 
 const generateCLIAPIKey = async (req, res) => {
@@ -107,10 +103,14 @@ const generateCLIAPIKey = async (req, res) => {
     const userId = decodedAccessToken.sub;
     const orgId = req.params.orgId;
     const { name } = req.body || {};
-    const expiryInput = req.body?.expiredAt ?? req.body?.expired_at ?? req.body?.expiresAt;
-    const expiredAt = parseExpiry(expiryInput);
-    const tokenScopes = normalizeScopes(decodedAccessToken?.scope, []);
-    const requestedScopes = normalizeScopes(req.body?.scopes, [constants.SCOPES.DEVELOPER]);
+    const durationInput = req.body?.validDuration ?? req.body?.duration ?? req.body?.validityDuration;
+    const validDuration = parseValidityDuration(durationInput);
+    const expiredAt = validDuration ? new Date(Date.now() + (validDuration * 1000)) : null;
+    const scopeValidationEnabled = isScopeValidationEnabled();
+    const tokenScopes = scopeValidationEnabled ? normalizeScopes(decodedAccessToken?.scope, []) : [];
+    const requestedScopes = scopeValidationEnabled
+        ? normalizeScopes(req.body?.scopes, [])
+        : [];
 
     if (!userId) {
         return res.status(400).json({
@@ -133,21 +133,21 @@ const generateCLIAPIKey = async (req, res) => {
             description: 'name must match ^[a-z0-9][a-z0-9_-]{0,127}$'
         });
     }
-    if (!expiredAt) {
+    if (!validDuration || !expiredAt) {
         return res.status(400).json({
             code: '400',
             message: 'Bad Request',
-            description: 'expiredAt must be a future timestamp'
+            description: 'validDuration must be a positive integer number of seconds'
         });
     }
-    if (requestedScopes.length === 0) {
+    if (scopeValidationEnabled && requestedScopes.length === 0) {
         return res.status(400).json({
             code: '400',
             message: 'Bad Request',
             description: 'At least one scope is required'
         });
     }
-    if (requestedScopes.includes(constants.SCOPES.ADMIN) && !tokenScopes.includes(constants.SCOPES.ADMIN)) {
+    if (scopeValidationEnabled && requestedScopes.includes(constants.SCOPES.ADMIN) && !tokenScopes.includes(constants.SCOPES.ADMIN)) {
         return res.status(403).json({
             code: '403',
             message: 'Forbidden',
@@ -160,7 +160,7 @@ const generateCLIAPIKey = async (req, res) => {
         const secretPart = crypto.randomBytes(32).toString('base64url');
         const apiKey = `${API_KEY_PREFIX}_${API_KEY_VERSION}_${keyId}_${secretPart}`;
         const keyHash = hashAPIKey(apiKey);
-        const normalizedScopes = requestedScopes.join(' ');
+        const normalizedScopes = scopeValidationEnabled ? requestedScopes.join(' ') : '';
 
         await CLIAPIKey.create({
             API_KEY_ID: keyId,
@@ -177,13 +177,15 @@ const generateCLIAPIKey = async (req, res) => {
             orgId,
             userId,
             keyId,
-            scopes: normalizedScopes
+            scopes: normalizedScopes,
+            scopeValidationEnabled
         });
 
         return res.status(201).json({
             apiKey,
             apiKeyId: keyId,
             name: name.trim(),
+            validDuration,
             scopes: normalizedScopes,
             expiredAt: expiredAt.toISOString()
         });
