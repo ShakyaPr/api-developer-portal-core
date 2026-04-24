@@ -17,10 +17,13 @@
  * under the License.
  */
 const minimatch = require('minimatch');
+const crypto = require('crypto');
 const constants = require('../utils/constants');
 const config = require(process.cwd() + '/config.json');
 const secret = require(process.cwd() + '/secret.json');
 const adminDao = require('../dao/admin');
+const CLIAPIKey = require('../models/cliApiKey');
+const { API_KEY_PREFIX, API_KEY_VERSION, hashAPIKey } = require('../services/apiKeyGenService');
 const { validationResult } = require('express-validator');
 const { jwtVerify, createRemoteJWKSet, importX509 } = require('jose');
 const util = require('../utils/util');
@@ -68,7 +71,7 @@ function enforceSecuirty(scope) {
                         req.params.orgId = organization;
                     }
                 }
-                enforceAPIKey(req, res, next);
+                return enforceAPIKey(req, res, next, scope);
             } else if (req.connection.getPeerCertificate(true)) {
                 enforceMTLS(req, res, next);
             } else {
@@ -430,19 +433,103 @@ const enforceMTLS = (req, res, next) => {
     return next();
 };
 
-const enforceAPIKey = (req, res, next) => {
+function getConfiguredAPIKey(req, keyType) {
+    return req.headers[keyType.toLowerCase()] || req.headers[keyType];
+}
+
+function timingSafeStringEqual(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string') {
+        return false;
+    }
+    const hash = value => crypto.createHash('sha256').update(value).digest();
+    return crypto.timingSafeEqual(hash(a), hash(b));
+}
+
+function parseGeneratedAPIKey(apiKey) {
+    if (typeof apiKey !== 'string') {
+        return null;
+    }
+    const parts = apiKey.split('_');
+    if (parts.length < 4 || parts[0] !== API_KEY_PREFIX || parts[1] !== API_KEY_VERSION || !parts[2]) {
+        return null;
+    }
+    return {
+        keyId: parts[2]
+    };
+}
+
+function hasRequiredScope(storedScopes, requiredScope) {
+    if (!requiredScope) {
+        return true;
+    }
+    return (storedScopes || '').split(/\s+/).filter(Boolean).includes(requiredScope);
+}
+
+const enforceAPIKey = async (req, res, next, scope) => {
     const keyType = config.advanced?.apiKey?.keyType;
 
     if (!keyType || !secret.apiKeySecret) {
         return res.status(500).json({ error: "Server configuration error" });
     }
 
-    const apiKey = req.headers[keyType.toLowerCase()];
+    const apiKey = getConfiguredAPIKey(req, keyType);
 
-    if (!apiKey || apiKey !== secret.apiKeySecret) {
+    if (!apiKey) {
         return res.status(401).json({ error: "Unauthorized: API key is invalid or not found" });
     }
-    return next();
+
+    if (timingSafeStringEqual(apiKey, secret.apiKeySecret)) {
+        return next();
+    }
+
+    const parsedKey = parseGeneratedAPIKey(apiKey);
+    if (!parsedKey) {
+        return res.status(401).json({ error: "Unauthorized: API key is invalid or not found" });
+    }
+
+    try {
+        const apiKeyRecord = await CLIAPIKey.findOne({
+            where: {
+                API_KEY_ID: parsedKey.keyId,
+                STATUS: 'ACTIVE'
+            }
+        });
+
+        if (!apiKeyRecord) {
+            return res.status(401).json({ error: "Unauthorized: API key is invalid or not found" });
+        }
+
+        if (apiKeyRecord.EXPIRED_AT && new Date(apiKeyRecord.EXPIRED_AT) <= new Date()) {
+            return res.status(401).json({ error: "Unauthorized: API key is expired" });
+        }
+
+        if (req.params.orgId && req.params.orgId !== apiKeyRecord.ORG_ID) {
+            return res.status(403).json({ error: "Forbidden: API key is not valid for this organization" });
+        }
+
+        const receivedHash = hashAPIKey(apiKey);
+        if (!timingSafeStringEqual(receivedHash, apiKeyRecord.KEY_HASH)) {
+            return res.status(401).json({ error: "Unauthorized: API key is invalid or not found" });
+        }
+
+        if (!hasRequiredScope(apiKeyRecord.SCOPES, scope)) {
+            return res.status(403).json({ error: "Forbidden: API key does not have required scope" });
+        }
+
+        req[constants.USER_ID] = apiKeyRecord.USER_ID;
+        req.user = req.user || {};
+        req.user.sub = apiKeyRecord.USER_ID;
+        req.user[constants.USER_ID] = apiKeyRecord.USER_ID;
+        req.user[constants.ORG_ID] = apiKeyRecord.ORG_ID;
+        return next();
+    } catch (error) {
+        logger.error("Error validating CLI API key", {
+            error: error.message,
+            stack: error.stack,
+            operation: "validateCLIAPIKey"
+        });
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
 };
 
 function getNestedValue(obj, path) {

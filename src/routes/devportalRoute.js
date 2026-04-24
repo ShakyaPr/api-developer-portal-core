@@ -39,6 +39,7 @@ const config = require(process.cwd() + '/config.json');
 const platformSubscriptionService = require('../services/platformSubscriptionService');
 const platformApiKeyService = require('../services/platformApiKeyService');
 const apiFlowService = require('../services/apiFlowService');
+const apiKeyGenService = require('../services/apiKeyGenService');
 
 router.post('/organizations', enforceSecuirty(constants.SCOPES.ADMIN), adminService.createOrganization);
 router.get('/organizations', enforceSecuirty(constants.SCOPES.ADMIN), adminService.getOrganizations);
@@ -223,6 +224,10 @@ router.get('/organizations/:orgId/views/:viewName/api-flows/:apiFlowId', enforce
 router.put('/organizations/:orgId/views/:viewName/api-flows/:apiFlowId', enforceSecuirty(constants.SCOPES.ADMIN), requireCsrfForMutatingApi, apiFlowService.updateAPIFlow);
 router.delete('/organizations/:orgId/views/:viewName/api-flows/:apiFlowId', enforceSecuirty(constants.SCOPES.ADMIN), requireCsrfForMutatingApi, apiFlowService.deleteAPIFlow);
 router.post('/organizations/:orgId/views/:viewName/api-flows/generate-prompt', enforceSecuirty(constants.SCOPES.ADMIN), requireCsrfForMutatingApi, apiFlowService.generatePrompt);
+
+// API Key Generation
+router.post('/organizations/:orgId/cli-api-keys/generate',
+    enforceSecuirty(constants.SCOPES.DEVELOPER), requireCsrfForMutatingApi, apiKeyGenService.generateCLIAPIKey);
 
 router.post('/temp-arazzo-file', enforceSecuirty(constants.SCOPES.ADMIN), requireCsrfForMutatingApi, async (req, res) => {
     const { content, filename } = req.body;
