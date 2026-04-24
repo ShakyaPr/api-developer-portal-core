@@ -33,7 +33,7 @@ const CLIAPIKey = sequelize.define(
             }
         },
         STATUS: {
-            type: DataTypes.ENUM('ACTIVE', 'REVOKED'),
+            type: DataTypes.ENUM('ACTIVE', 'REVOKED', 'EXPIRED'),
             allowNull: false,
             defaultValue: 'ACTIVE'
         },

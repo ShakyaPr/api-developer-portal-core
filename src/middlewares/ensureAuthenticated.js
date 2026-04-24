@@ -468,6 +468,15 @@ function hasRequiredScope(storedScopes, requiredScope) {
     return (storedScopes || '').split(/\s+/).filter(Boolean).includes(requiredScope);
 }
 
+async function markCLIAPIKeyExpired(apiKeyRecord) {
+    if (!apiKeyRecord || apiKeyRecord.STATUS === 'EXPIRED') {
+        return;
+    }
+    await apiKeyRecord.update({
+        STATUS: 'EXPIRED'
+    });
+}
+
 const enforceAPIKey = async (req, res, next, scope) => {
     const keyType = config.advanced?.apiKey?.keyType;
 
@@ -503,7 +512,11 @@ const enforceAPIKey = async (req, res, next, scope) => {
         }
 
         if (apiKeyRecord.EXPIRED_AT && new Date(apiKeyRecord.EXPIRED_AT) <= new Date()) {
-            return res.status(401).json({ error: "Unauthorized: API key is expired" });
+            await markCLIAPIKeyExpired(apiKeyRecord);
+            return res.status(401).json({
+                error: "Unauthorized: API key is expired",
+                message: "The provided API key has expired"
+            });
         }
 
         if (req.params.orgId && req.params.orgId !== apiKeyRecord.ORG_ID) {
