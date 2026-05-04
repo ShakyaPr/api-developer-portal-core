@@ -1,0 +1,5088 @@
+openapi: 3.0.3
+info:
+  title: WSO2 API Developer Portal Core - Devportal API
+  version: 1.0.0
+  description: >-
+    OpenAPI specification generated from src/routes/devportalRoute.js. Route scopes are taken from
+    enforceSecuirty(constants.SCOPES.*): admin for administrator resources and dev for developer resources. Billing
+    routes use ensureBillingAuth and are documented with cookie/API-key authentication instead of OAuth scopes.
+servers:
+  - url: /
+    description: Application root. Devportal APIs are mounted under /devportal.
+tags:
+  - name: API Flows
+  - name: API Keys
+  - name: APIs
+  - name: Application Key Mappings
+  - name: Application Keys
+  - name: Applications
+  - name: Authentication
+  - name: Billing
+  - name: Billing Engine Keys
+  - name: Identity Providers
+  - name: Invoices
+  - name: Labels
+  - name: Organization Content
+  - name: Organizations
+  - name: Platform API Keys
+  - name: Platform Subscriptions
+  - name: Providers
+  - name: SDK
+  - name: Subscription Policies
+  - name: Subscriptions
+  - name: Usage
+  - name: Utility
+  - name: Views
+paths:
+  /devportal/organizations:
+    post:
+      tags:
+        - Organizations
+      summary: Create Organization
+      operationId: postCreateOrganizationByOrganizations
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    get:
+      tags:
+        - Organizations
+      summary: Get Organizations
+      operationId: getGetOrganizationsByOrganizations
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}:
+    put:
+      tags:
+        - Organizations
+      summary: Update Organization
+      operationId: putUpdateOrganizationByOrganizationsOrgId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    get:
+      tags:
+        - Organizations
+      summary: Get Organization
+      operationId: getGetOrganizationByOrganizationsOrgId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    delete:
+      tags:
+        - Organizations
+      summary: Delete Organization
+      operationId: deleteDeleteOrganizationByOrganizationsOrgId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}/identityProvider:
+    post:
+      tags:
+        - Identity Providers
+      summary: Create Identity Provider
+      operationId: postCreateIdentityProviderByOrganizationsOrgIdIdentityProvider
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    put:
+      tags:
+        - Identity Providers
+      summary: Update Identity Provider
+      operationId: putUpdateIdentityProviderByOrganizationsOrgIdIdentityProvider
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    get:
+      tags:
+        - Identity Providers
+      summary: Get Identity Provider
+      operationId: getGetIdentityProviderByOrganizationsOrgIdIdentityProvider
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    delete:
+      tags:
+        - Identity Providers
+      summary: Delete Identity Provider
+      operationId: deleteDeleteIdentityProviderByOrganizationsOrgIdIdentityProvider
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}/views/{name}/layout:
+    post:
+      tags:
+        - Organization Content
+      summary: Create Org Content
+      operationId: postCreateOrgContentByOrganizationsOrgIdViewsNameLayout
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          description: View, label, or content name.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    put:
+      tags:
+        - Organization Content
+      summary: Update Org Content
+      operationId: putUpdateOrgContentByOrganizationsOrgIdViewsNameLayout
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          description: View, label, or content name.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    get:
+      tags:
+        - Organization Content
+      summary: Get Org Content
+      operationId: getGetOrgContentByOrganizationsOrgIdViewsNameLayout
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          description: View, label, or content name.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            text/html:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+    delete:
+      tags:
+        - Organization Content
+      summary: Delete Org Content
+      operationId: deleteDeleteOrgContentByOrganizationsOrgIdViewsNameLayout
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          description: View, label, or content name.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}/views/{name}/layout/{fileType}:
+    get:
+      tags:
+        - Organization Content
+      summary: Get Org Content
+      operationId: getGetOrgContentByOrganizationsOrgIdViewsNameLayoutFileType
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          description: View, label, or content name.
+          schema:
+            type: string
+        - name: fileType
+          in: path
+          required: true
+          description: Requested layout file type.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            text/html:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+  /devportal/organizations/{orgId}/provider:
+    post:
+      tags:
+        - Providers
+      summary: Create Provider
+      operationId: postCreateProviderByOrganizationsOrgIdProvider
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    put:
+      tags:
+        - Providers
+      summary: Update Provider
+      operationId: putUpdateProviderByOrganizationsOrgIdProvider
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    get:
+      tags:
+        - Providers
+      summary: Get Providers
+      operationId: getGetProvidersByOrganizationsOrgIdProvider
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    delete:
+      tags:
+        - Providers
+      summary: Delete Provider
+      operationId: deleteDeleteProviderByOrganizationsOrgIdProvider
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}/apis:
+    post:
+      tags:
+        - Organizations
+      summary: Create A P I Metadata
+      operationId: postCreateAPIMetadataByOrganizationsOrgIdApis
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                apiDefinition:
+                  type: string
+                  format: binary
+                schemaDefinition:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    get:
+      tags:
+        - Organizations
+      summary: Get All A P I Metadata
+      operationId: getGetAllAPIMetadataByOrganizationsOrgIdApis
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/apis/{apiId}:
+    get:
+      tags:
+        - Organizations
+      summary: Get A P I Metadata
+      operationId: getGetAPIMetadataByOrganizationsOrgIdApisApiId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    put:
+      tags:
+        - Organizations
+      summary: Update A P I Metadata
+      operationId: putUpdateAPIMetadataByOrganizationsOrgIdApisApiId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                apiDefinition:
+                  type: string
+                  format: binary
+                schemaDefinition:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    delete:
+      tags:
+        - Organizations
+      summary: Delete A P I Metadata
+      operationId: deleteDeleteAPIMetadataByOrganizationsOrgIdApisApiId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/subscription-policies:
+    post:
+      tags:
+        - Subscription Policies
+      summary: Add Subscription Policies
+      operationId: postAddSubscriptionPoliciesByOrganizationsOrgIdSubscriptionPolicies
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    put:
+      tags:
+        - Subscription Policies
+      summary: Put Subscription Policies
+      operationId: putPutSubscriptionPoliciesByOrganizationsOrgIdSubscriptionPolicies
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/subscription-policies/{policyID}:
+    get:
+      tags:
+        - Subscription Policies
+      summary: Get Subscription Policy
+      operationId: getGetSubscriptionPolicyByOrganizationsOrgIdSubscriptionPoliciesPolicyID
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: policyID
+          in: path
+          required: true
+          description: Subscription policy identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/subscription-policies/{policyName}:
+    delete:
+      tags:
+        - Subscription Policies
+      summary: Delete Subscription Policy
+      operationId: deleteDeleteSubscriptionPolicyByOrganizationsOrgIdSubscriptionPoliciesPolicyName
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: policyName
+          in: path
+          required: true
+          description: Subscription policy name.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/apis/{apiId}/template:
+    post:
+      tags:
+        - Organizations
+      summary: Create A P I Template
+      operationId: postCreateAPITemplateByOrganizationsOrgIdApisApiIdTemplate
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - apiContent
+              properties:
+                apiContent:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    put:
+      tags:
+        - Organizations
+      summary: Update A P I Template
+      operationId: putUpdateAPITemplateByOrganizationsOrgIdApisApiIdTemplate
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - apiContent
+              properties:
+                apiContent:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    get:
+      tags:
+        - Organizations
+      summary: Get A P I File
+      operationId: getGetAPIFileByOrganizationsOrgIdApisApiIdTemplate
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            text/html:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+    delete:
+      tags:
+        - Organizations
+      summary: Delete A P I File
+      operationId: deleteDeleteAPIFileByOrganizationsOrgIdApisApiIdTemplate
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/apis:
+    post:
+      tags:
+        - APIs
+      summary: Create A P I Metadata
+      operationId: postCreateAPIMetadataByApis
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                apiDefinition:
+                  type: string
+                  format: binary
+                schemaDefinition:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    get:
+      tags:
+        - APIs
+      summary: Get All A P I Metadata
+      operationId: getGetAllAPIMetadataByApis
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/apis/{apiId}:
+    put:
+      tags:
+        - APIs
+      summary: Update A P I Metadata
+      operationId: putUpdateAPIMetadataByApisApiId
+      parameters:
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                apiDefinition:
+                  type: string
+                  format: binary
+                schemaDefinition:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    delete:
+      tags:
+        - APIs
+      summary: Delete A P I Metadata
+      operationId: deleteDeleteAPIMetadataByApisApiId
+      parameters:
+        - name: apiId
+          in: path
+          required: true
+          description: API identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/labels:
+    post:
+      tags:
+        - Labels
+      summary: Create Labels
+      operationId: postCreateLabelsByOrganizationsOrgIdLabels
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    put:
+      tags:
+        - Labels
+      summary: Update Label
+      operationId: putUpdateLabelByOrganizationsOrgIdLabels
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    get:
+      tags:
+        - Labels
+      summary: Retrieve Labels
+      operationId: getRetrieveLabelsByOrganizationsOrgIdLabels
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    delete:
+      tags:
+        - Labels
+      summary: Delete Labels
+      operationId: deleteDeleteLabelsByOrganizationsOrgIdLabels
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}/applications:
+    post:
+      tags:
+        - Applications
+      summary: Create Dev Portal Application
+      operationId: postCreateDevPortalApplicationByOrganizationsOrgIdApplications
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    get:
+      tags:
+        - Applications
+      summary: Get Dev Portal Applications
+      operationId: getGetDevPortalApplicationsByOrganizationsOrgIdApplications
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/applications/{appId}:
+    put:
+      tags:
+        - Applications
+      summary: Update Dev Portal Application
+      operationId: putUpdateDevPortalApplicationByOrganizationsOrgIdApplicationsAppId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: appId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    get:
+      tags:
+        - Applications
+      summary: Get Dev Portal Application Details
+      operationId: getGetDevPortalApplicationDetailsByOrganizationsOrgIdApplicationsAppId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: appId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    delete:
+      tags:
+        - Applications
+      summary: Delete Dev Portal Application
+      operationId: deleteDeleteDevPortalApplicationByOrganizationsOrgIdApplicationsAppId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: appId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/api-platform-subscriptions:
+    post:
+      tags:
+        - Platform Subscriptions
+      summary: Create Platform Gateway Subscription
+      operationId: postCreatePlatformGatewaySubscriptionByOrganizationsOrgIdApiPlatformSubscriptions
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    get:
+      tags:
+        - Platform Subscriptions
+      summary: List Platform Gateway Subscriptions
+      operationId: getListPlatformGatewaySubscriptionsByOrganizationsOrgIdApiPlatformSubscriptions
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/api-platform-subscriptions/{subscriptionId}:
+    get:
+      tags:
+        - Platform Subscriptions
+      summary: Get Platform Gateway Subscription
+      operationId: getGetPlatformGatewaySubscriptionByOrganizationsOrgIdApiPlatformSubscriptionsSubscriptionId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subscriptionId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    put:
+      tags:
+        - Platform Subscriptions
+      summary: Update Platform Gateway Subscription
+      operationId: putUpdatePlatformGatewaySubscriptionByOrganizationsOrgIdApiPlatformSubscriptionsSubscriptionId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subscriptionId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    delete:
+      tags:
+        - Platform Subscriptions
+      summary: Delete Platform Gateway Subscription
+      operationId: deleteDeletePlatformGatewaySubscriptionByOrganizationsOrgIdApiPlatformSubscriptionsSubscriptionId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subscriptionId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/platform-api-keys/generate:
+    post:
+      tags:
+        - Platform API Keys
+      summary: Generate Platform Api Key
+      operationId: postGeneratePlatformApiKeyByOrganizationsOrgIdPlatformApiKeysGenerate
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+      x-csrf-protected: true
+  /devportal/organizations/{orgId}/platform-api-keys:
+    get:
+      tags:
+        - Platform API Keys
+      summary: List Platform Api Keys
+      operationId: getListPlatformApiKeysByOrganizationsOrgIdPlatformApiKeys
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/platform-api-keys/{apiKeyId}/regenerate:
+    post:
+      tags:
+        - Platform API Keys
+      summary: Regenerate Platform Api Key
+      operationId: postRegeneratePlatformApiKeyByOrganizationsOrgIdPlatformApiKeysApiKeyIdRegenerate
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiKeyId
+          in: path
+          required: true
+          description: Platform API key identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+      x-csrf-protected: true
+  /devportal/organizations/{orgId}/platform-api-keys/{apiKeyId}/revoke:
+    post:
+      tags:
+        - Platform API Keys
+      summary: Revoke Platform Api Key
+      operationId: postRevokePlatformApiKeyByOrganizationsOrgIdPlatformApiKeysApiKeyIdRevoke
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: apiKeyId
+          in: path
+          required: true
+          description: Platform API key identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+      x-csrf-protected: true
+  /devportal/organizations/{orgId}/subscriptions:
+    post:
+      tags:
+        - Subscriptions
+      summary: Create Subscription
+      operationId: postCreateSubscriptionByOrganizationsOrgIdSubscriptions
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    put:
+      tags:
+        - Subscriptions
+      summary: Update Subscription
+      operationId: putUpdateSubscriptionByOrganizationsOrgIdSubscriptions
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    get:
+      tags:
+        - Subscriptions
+      summary: Get All Subscriptions
+      operationId: getGetAllSubscriptionsByOrganizationsOrgIdSubscriptions
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    delete:
+      tags:
+        - Subscriptions
+      summary: Unsubscribe A P I
+      operationId: deleteUnsubscribeAPIByOrganizationsOrgIdSubscriptions
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/subscriptions/{subscriptionId}:
+    get:
+      tags:
+        - Subscriptions
+      summary: Get Subscription
+      operationId: getGetSubscriptionByOrganizationsOrgIdSubscriptionsSubscriptionId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subscriptionId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    delete:
+      tags:
+        - Subscriptions
+      summary: Delete Subscription
+      operationId: deleteDeleteSubscriptionByOrganizationsOrgIdSubscriptionsSubscriptionId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subscriptionId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/app-key-mapping:
+    post:
+      tags:
+        - Application Key Mappings
+      summary: Create App Key Mapping
+      operationId: postCreateAppKeyMappingByOrganizationsOrgIdAppKeyMapping
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/app-key-mapping/{appId}:
+    get:
+      tags:
+        - Application Key Mappings
+      summary: Retrive App Key Mappings
+      operationId: getRetriveAppKeyMappingsByOrganizationsOrgIdAppKeyMappingAppId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: appId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    delete:
+      tags:
+        - Application Key Mappings
+      summary: Update Dev Portal Application
+      operationId: deleteUpdateDevPortalApplicationByOrganizationsOrgIdAppKeyMappingAppId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: appId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/views:
+    post:
+      tags:
+        - Views
+      summary: Add View
+      operationId: postAddViewByOrganizationsOrgIdViews
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    get:
+      tags:
+        - Views
+      summary: Get All Views
+      operationId: getGetAllViewsByOrganizationsOrgIdViews
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}/views/{name}:
+    put:
+      tags:
+        - Views
+      summary: Update View
+      operationId: putUpdateViewByOrganizationsOrgIdViewsName
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          description: View, label, or content name.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    get:
+      tags:
+        - Views
+      summary: Get View
+      operationId: getGetViewByOrganizationsOrgIdViewsName
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          description: View, label, or content name.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    delete:
+      tags:
+        - Views
+      summary: Delete View
+      operationId: deleteDeleteViewByOrganizationsOrgIdViewsName
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          description: View, label, or content name.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/applications:
+    post:
+      tags:
+        - Applications
+      summary: Save Application
+      operationId: postSaveApplicationByApplications
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}:
+    put:
+      tags:
+        - Applications
+      summary: Update Application
+      operationId: putUpdateApplicationByApplicationsApplicationId
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    delete:
+      tags:
+        - Applications
+      summary: Delete Application
+      operationId: deleteDeleteApplicationByApplicationsApplicationId
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/reset-throttle-policy:
+    post:
+      tags:
+        - Application Keys
+      summary: Reset Throttling Policy
+      operationId: postResetThrottlingPolicyByApplicationsApplicationIdResetThrottlePolicy
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/api-keys/generate:
+    post:
+      tags:
+        - API Keys
+      summary: Generate A P I Keys
+      operationId: postGenerateAPIKeysByApplicationsApplicationIdApiKeysGenerate
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/generate-keys:
+    post:
+      tags:
+        - Application Keys
+      summary: Generate Application Keys
+      operationId: postGenerateApplicationKeysByApplicationsApplicationIdGenerateKeys
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/oauth-keys/{keyMappingId}/generate-token:
+    post:
+      tags:
+        - Application Keys
+      summary: Generate O Auth Keys
+      operationId: postGenerateOAuthKeysByApplicationsApplicationIdOauthKeysKeyMappingIdGenerateToken
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+        - name: keyMappingId
+          in: path
+          required: true
+          description: OAuth key mapping identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/oauth-keys/{keyMappingId}:
+    delete:
+      tags:
+        - Application Keys
+      summary: Revoke O Auth Keys
+      operationId: deleteRevokeOAuthKeysByApplicationsApplicationIdOauthKeysKeyMappingId
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+        - name: keyMappingId
+          in: path
+          required: true
+          description: OAuth key mapping identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+    put:
+      tags:
+        - Application Keys
+      summary: Update O Auth Keys
+      operationId: putUpdateOAuthKeysByApplicationsApplicationIdOauthKeysKeyMappingId
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+        - name: keyMappingId
+          in: path
+          required: true
+          description: OAuth key mapping identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/oauth-keys/{keyMappingId}/clean-up:
+    post:
+      tags:
+        - Application Keys
+      summary: Clean Up
+      operationId: postCleanUpByApplicationsApplicationIdOauthKeysKeyMappingIdCleanUp
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+        - name: keyMappingId
+          in: path
+          required: true
+          description: OAuth key mapping identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/api-keys/generate:
+    post:
+      tags:
+        - API Keys
+      summary: Generate A P I Keys
+      operationId: postGenerateAPIKeysByApiKeysGenerate
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/api-keys/{apiKeyID}/revoke:
+    post:
+      tags:
+        - API Keys
+      summary: Revoke A P I Keys
+      operationId: postRevokeAPIKeysByApiKeysApiKeyIDRevoke
+      parameters:
+        - name: apiKeyID
+          in: path
+          required: true
+          description: API key identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/api-keys/{apiKeyID}/regenerate:
+    post:
+      tags:
+        - API Keys
+      summary: Regenerate A P I Keys
+      operationId: postRegenerateAPIKeysByApiKeysApiKeyIDRegenerate
+      parameters:
+        - name: apiKeyID
+          in: path
+          required: true
+          description: API key identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/generate-sdk:
+    post:
+      tags:
+        - Applications
+      summary: Generate S D K
+      operationId: postGenerateSDKByApplicationsApplicationIdGenerateSdk
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/sdk/job-progress/{jobId}:
+    get:
+      tags:
+        - SDK
+      summary: Stream S D K Progress
+      operationId: getStreamSDKProgressByApplicationsApplicationIdSdkJobProgressJobId
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+        - name: jobId
+          in: path
+          required: true
+          description: SDK generation job identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Server-sent SDK job progress stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/applications/{applicationId}/sdk/cancel/{jobId}:
+    post:
+      tags:
+        - SDK
+      summary: Cancel S D K
+      operationId: postCancelSDKByApplicationsApplicationIdSdkCancelJobId
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          description: Application identifier.
+          schema:
+            type: string
+        - name: jobId
+          in: path
+          required: true
+          description: SDK generation job identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/sdk/download/{filename}:
+    get:
+      tags:
+        - SDK
+      summary: Download S D K
+      operationId: getDownloadSDKBySdkDownloadFilename
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          description: Generated SDK filename.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            text/html:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - dev
+        - apiKeyAuth: []
+      x-required-scopes:
+        - dev
+  /devportal/organizations/{orgId}/billing/usage-data:
+    get:
+      tags:
+        - Billing
+      summary: Get Usage Data
+      operationId: getGetUsageDataByOrganizationsOrgIdBillingUsageData
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/billing/payment-methods:
+    get:
+      tags:
+        - Billing
+      summary: Get Payment Methods
+      operationId: getGetPaymentMethodsByOrganizationsOrgIdBillingPaymentMethods
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/billing-engine-keys:
+    post:
+      tags:
+        - Billing Engine Keys
+      summary: Add Billing Engine Keys
+      operationId: postAddBillingEngineKeysByOrganizationsOrgIdBillingEngineKeys
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-origin-validated: true
+    put:
+      tags:
+        - Billing Engine Keys
+      summary: Update Billing Engine Keys
+      operationId: putUpdateBillingEngineKeysByOrganizationsOrgIdBillingEngineKeys
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-origin-validated: true
+    delete:
+      tags:
+        - Billing Engine Keys
+      summary: Delete Billing Engine Keys
+      operationId: deleteDeleteBillingEngineKeysByOrganizationsOrgIdBillingEngineKeys
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-origin-validated: true
+    get:
+      tags:
+        - Billing Engine Keys
+      summary: Get Billing Engine Keys
+      operationId: getGetBillingEngineKeysByOrganizationsOrgIdBillingEngineKeys
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}/billing/info:
+    get:
+      tags:
+        - Billing
+      summary: Get Billing Info
+      operationId: getGetBillingInfoByOrganizationsOrgIdBillingInfo
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/billing/subscriptions:
+    get:
+      tags:
+        - Billing
+      summary: Get Active Subscriptions
+      operationId: getGetActiveSubscriptionsByOrganizationsOrgIdBillingSubscriptions
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/monetization/checkout:
+    post:
+      tags:
+        - Billing
+      summary: Create Checkout Session For Subscription
+      operationId: postCreateCheckoutSessionForSubscriptionByOrganizationsOrgIdMonetizationCheckout
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-origin-validated: true
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/monetization/stripe/register/{checkoutSessionId}:
+    post:
+      tags:
+        - Billing
+      summary: Register Stripe Checkout Session
+      operationId: postRegisterStripeCheckoutSessionByOrganizationsOrgIdMonetizationStripeRegisterCheckoutSessionId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: checkoutSessionId
+          in: path
+          required: true
+          description: Stripe checkout session identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-origin-validated: true
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/subscriptions/{subId}/cancel:
+    post:
+      tags:
+        - Subscriptions
+      summary: Cancel Subscription
+      operationId: postCancelSubscriptionByOrganizationsOrgIdSubscriptionsSubIdCancel
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-origin-validated: true
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/subscriptions/{subId}/billing-status:
+    get:
+      tags:
+        - Billing
+      summary: Get Subscription Billing Status
+      operationId: getGetSubscriptionBillingStatusByOrganizationsOrgIdSubscriptionsSubIdBillingStatus
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/billing-portal:
+    post:
+      tags:
+        - Billing
+      summary: Create Billing Portal By Org
+      operationId: postCreateBillingPortalByOrgByOrganizationsOrgIdBillingPortal
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-origin-validated: true
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/subscriptions/{subId}/billing-portal:
+    post:
+      tags:
+        - Billing
+      summary: Create Billing Portal
+      operationId: postCreateBillingPortalByOrganizationsOrgIdSubscriptionsSubIdBillingPortal
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-origin-validated: true
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/subscriptions/{subId}/usage:
+    get:
+      tags:
+        - Usage
+      summary: Get Subscription Usage
+      operationId: getGetSubscriptionUsageByOrganizationsOrgIdSubscriptionsSubIdUsage
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/invoices:
+    get:
+      tags:
+        - Invoices
+      summary: List Invoices
+      operationId: getListInvoicesByOrganizationsOrgIdInvoices
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/invoices/{invoiceId}:
+    get:
+      tags:
+        - Invoices
+      summary: Get Invoice
+      operationId: getGetInvoiceByOrganizationsOrgIdInvoicesInvoiceId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: invoiceId
+          in: path
+          required: true
+          description: Invoice identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/subscriptions/{subId}/invoices:
+    get:
+      tags:
+        - Invoices
+      summary: List Invoices By Subscription
+      operationId: getListInvoicesBySubscriptionByOrganizationsOrgIdSubscriptionsSubIdInvoices
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: subId
+          in: path
+          required: true
+          description: Subscription identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/invoices/{invoiceId}/pdf:
+    get:
+      tags:
+        - Invoices
+      summary: Get Invoice Pdf Link
+      operationId: getGetInvoicePdfLinkByOrganizationsOrgIdInvoicesInvoiceIdPdf
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: invoiceId
+          in: path
+          required: true
+          description: Invoice identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            text/html:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/invoices/{invoiceId}/hosted:
+    get:
+      tags:
+        - Invoices
+      summary: Redirect Hosted Invoice
+      operationId: getRedirectHostedInvoiceByOrganizationsOrgIdInvoicesInvoiceIdHosted
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: invoiceId
+          in: path
+          required: true
+          description: Invoice identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            text/html:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+        - apiKeyAuth: []
+      x-auth-type: billing-session-or-api-key
+  /devportal/organizations/{orgId}/views/{viewName}/api-flows:
+    post:
+      tags:
+        - API Flows
+      summary: Create A P I Flow
+      operationId: postCreateAPIFlowByOrganizationsOrgIdViewsViewNameApiFlows
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: viewName
+          in: path
+          required: true
+          description: View name.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-csrf-protected: true
+    get:
+      tags:
+        - API Flows
+      summary: Get All A P I Flows
+      operationId: getGetAllAPIFlowsByOrganizationsOrgIdViewsViewNameApiFlows
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: viewName
+          in: path
+          required: true
+          description: View name.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+  /devportal/organizations/{orgId}/views/{viewName}/api-flows/{apiFlowId}:
+    get:
+      tags:
+        - API Flows
+      summary: Get A P I Flow
+      operationId: getGetAPIFlowByOrganizationsOrgIdViewsViewNameApiFlowsApiFlowId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: viewName
+          in: path
+          required: true
+          description: View name.
+          schema:
+            type: string
+        - name: apiFlowId
+          in: path
+          required: true
+          description: API flow identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+    put:
+      tags:
+        - API Flows
+      summary: Update A P I Flow
+      operationId: putUpdateAPIFlowByOrganizationsOrgIdViewsViewNameApiFlowsApiFlowId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: viewName
+          in: path
+          required: true
+          description: View name.
+          schema:
+            type: string
+        - name: apiFlowId
+          in: path
+          required: true
+          description: API flow identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-csrf-protected: true
+    delete:
+      tags:
+        - API Flows
+      summary: Delete A P I Flow
+      operationId: deleteDeleteAPIFlowByOrganizationsOrgIdViewsViewNameApiFlowsApiFlowId
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: viewName
+          in: path
+          required: true
+          description: View name.
+          schema:
+            type: string
+        - name: apiFlowId
+          in: path
+          required: true
+          description: API flow identifier.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-csrf-protected: true
+  /devportal/organizations/{orgId}/views/{viewName}/api-flows/generate-prompt:
+    post:
+      tags:
+        - API Flows
+      summary: Generate Prompt
+      operationId: postGeneratePromptByOrganizationsOrgIdViewsViewNameApiFlowsGeneratePrompt
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+        - name: viewName
+          in: path
+          required: true
+          description: View name.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-csrf-protected: true
+  /devportal/organizations/{orgId}/api-keys/generate:
+    post:
+      tags:
+        - API Keys
+      summary: Generate A P I Key
+      operationId: postGenerateAPIKeyByOrganizationsOrgIdApiKeysGenerate
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-csrf-protected: true
+  /devportal/temp-arazzo-file:
+    post:
+      tags:
+        - Utility
+      summary: Json
+      operationId: postJsonByTempArazzoFile
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+      x-csrf-protected: true
+  /devportal/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login
+      operationId: postLoginByLogin
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      security: []
+  /devportal/organizations/{orgId}/applications/import:
+    post:
+      tags:
+        - Applications
+      summary: Import Applications
+      operationId: postImportApplicationsByOrganizationsOrgIdApplicationsImport
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: Organization identifier.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    additionalProperties: true
+                  - type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth:
+            - admin
+        - apiKeyAuth: []
+      x-required-scopes:
+        - admin
+components:
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes:
+            admin: >-
+              Administrator access to organization, configuration, content, billing-engine, API-flow, and admin API-key
+              resources.
+            dev: Developer access to APIs, applications, subscriptions, SDK, and key-management resources.
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: api-key
+      description: >-
+        Header name is configurable with config.advanced.apiKey.keyType. Generated API keys are scope checked against
+        the same admin/dev route scope when scope validation is enabled.
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+      description: Authenticated browser session used by billing and portal-backed requests.
+  responses:
+    BadRequest:
+      description: Bad request
+    Unauthorized:
+      description: Unauthorized
+    Forbidden:
+      description: Forbidden
+    InternalServerError:
+      description: Internal server error

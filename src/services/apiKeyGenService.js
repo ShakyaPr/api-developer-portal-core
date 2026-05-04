@@ -20,7 +20,7 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const logger = require('../config/logger');
-const CLIAPIKey = require('../models/cliApiKey');
+const DPAPIKey = require('../models/apiKey');
 const constants = require('../utils/constants');
 const util = require('../utils/util');
 const secret = require(process.cwd() + '/secret.json');
@@ -81,7 +81,7 @@ function isScopeValidationEnabled() {
     return config.advanced?.disableScopeValidation === false;
 }
 
-const generateCLIAPIKey = async (req, res) => {
+const generateAPIKey = async (req, res) => {
     if (!secret.apiKeySecret) {
         return res.status(500).json({
             code: '500',
@@ -162,7 +162,7 @@ const generateCLIAPIKey = async (req, res) => {
         const keyHash = hashAPIKey(apiKey);
         const normalizedScopes = scopeValidationEnabled ? requestedScopes.join(' ') : '';
 
-        await CLIAPIKey.create({
+        await DPAPIKey.create({
             API_KEY_ID: keyId,
             ORG_ID: orgId,
             USER_ID: userId,
@@ -203,6 +203,6 @@ const generateCLIAPIKey = async (req, res) => {
 module.exports = {
     API_KEY_PREFIX,
     API_KEY_VERSION,
-    generateCLIAPIKey,
+    generateAPIKey,
     hashAPIKey
 };

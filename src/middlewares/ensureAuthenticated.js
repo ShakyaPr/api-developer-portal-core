@@ -22,7 +22,7 @@ const constants = require('../utils/constants');
 const config = require(process.cwd() + '/config.json');
 const secret = require(process.cwd() + '/secret.json');
 const adminDao = require('../dao/admin');
-const CLIAPIKey = require('../models/cliApiKey');
+const DPAPIKey = require('../models/apiKey');
 const { API_KEY_PREFIX, API_KEY_VERSION, hashAPIKey } = require('../services/apiKeyGenService');
 const { validationResult } = require('express-validator');
 const { jwtVerify, createRemoteJWKSet, importX509 } = require('jose');
@@ -468,7 +468,7 @@ function hasRequiredScope(storedScopes, requiredScope) {
     return (storedScopes || '').split(/\s+/).filter(Boolean).includes(requiredScope);
 }
 
-async function markCLIAPIKeyExpired(apiKeyRecord) {
+async function markAPIKeyExpired(apiKeyRecord) {
     if (!apiKeyRecord || apiKeyRecord.STATUS === 'EXPIRED') {
         return;
     }
@@ -500,7 +500,7 @@ const enforceAPIKey = async (req, res, next, scope) => {
     }
 
     try {
-        const apiKeyRecord = await CLIAPIKey.findOne({
+        const apiKeyRecord = await DPAPIKey.findOne({
             where: {
                 API_KEY_ID: parsedKey.keyId,
                 STATUS: 'ACTIVE'
@@ -512,7 +512,7 @@ const enforceAPIKey = async (req, res, next, scope) => {
         }
 
         if (apiKeyRecord.EXPIRED_AT && new Date(apiKeyRecord.EXPIRED_AT) <= new Date()) {
-            await markCLIAPIKeyExpired(apiKeyRecord);
+            await markAPIKeyExpired(apiKeyRecord);
             return res.status(401).json({
                 error: "Unauthorized: API key is expired",
                 message: "The provided API key has expired"
@@ -539,10 +539,10 @@ const enforceAPIKey = async (req, res, next, scope) => {
         req.user[constants.ORG_ID] = apiKeyRecord.ORG_ID;
         return next();
     } catch (error) {
-        logger.error("Error validating CLI API key", {
+        logger.error("Error validating API key", {
             error: error.message,
             stack: error.stack,
-            operation: "validateCLIAPIKey"
+            operation: "validateAPIKey"
         });
         return res.status(500).json({ error: "Internal Server Error" });
     }

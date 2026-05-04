@@ -2,8 +2,8 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../db/sequelize');
 const { Organization } = require('./organization');
 
-const CLIAPIKey = sequelize.define(
-    'CLI_API_KEY',
+const DPAPIKey = sequelize.define(
+    'DP_API_KEY',
     {
         API_KEY_ID: {
             type: DataTypes.STRING,
@@ -49,7 +49,7 @@ const CLIAPIKey = sequelize.define(
     },
     {
         timestamps: false,
-        tableName: 'CLI_API_KEY',
+        tableName: 'DP_API_KEY',
         indexes: [
             {
                 // for filter the API keys based on organization, user and status
@@ -63,8 +63,8 @@ const CLIAPIKey = sequelize.define(
     }
 );
 
-CLIAPIKey.belongsTo(Organization, {
+DPAPIKey.belongsTo(Organization, {
     foreignKey: 'ORG_ID'
 });
 
-module.exports = CLIAPIKey;
+module.exports = DPAPIKey;
